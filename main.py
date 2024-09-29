@@ -4,6 +4,12 @@ from config import API_KEY
 import json
 from config import ACCESS_TOKEN
 from GPTfunctions.func import GPT_API
+from convert import convert_to_wav
+import os
+
+def check_wav_extension(file_path):
+    _, extension = os.path.splitext(file_path).lower()
+    return extension == '.wav'
 
 configure_credentials(
     yandex_credentials=creds.YandexCredentials(
@@ -12,6 +18,11 @@ configure_credentials(
 )
 
 file_path = 'audio.wav' #путь к файлу, который надо транскрибировать
+
+# конвертируем файл с аудио в .wav, если он другого формата
+if not check_wav_extension(file_path):
+    convert_to_wav(file_path, 'audio.wav')
+
 
 from speechkit import model_repository
 from speechkit.stt import AudioProcessingType
